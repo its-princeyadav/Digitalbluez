@@ -1,20 +1,25 @@
 "use client"
 import { useState } from "react"
-import axiox from "axios"
+// import axiox from "axios"
 
 const page = () => {
   const [username , setUsername] = useState("")
   const [password , setPassword] = useState("")
    
-  const handlesubmit = async(e) => {
-    e.preventDefault()
-   try{
-const response = await axiox.post() 
-   }
-   catch(error){
-    console.error("Login failed:", error);
-   }
-  }
+const handlesubmit = async (e) => {
+  e.preventDefault()
+
+  const res = await fetch("/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username, password })
+  })
+
+  const data = await res.json()
+  alert(data.message)
+}
   return (
   <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">

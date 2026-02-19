@@ -1,29 +1,41 @@
-import connectionToDatabase from "@/lib/mongoose";
-import Admin from "@/models/Admin";
-import bcrypt from "bcryptjs" 
 import { NextResponse } from "next/server"
+import { connectDB } from "@/lib/db"
+import Admin from "@/models/Admin"
+import bcrypt from "bcryptjs"
 
 export async function POST(req) {
   try {
-    const { username, password } = await req.json()
-
     await connectDB()
 
-    const admin = await Admin.findOne({ username })
+    const { username, password } = await req.json()
 
-    if (!admin) {
-      return NextResponse.json({ message: "Admin not found" }, { status: 400 })
+    const user = await Admin.findOne({ username })
+
+    if (!user) {
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 400 }
+      )
     }
 
-    const isMatch = await bcrypt.compare(password, admin.password)
+    const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-      return NextResponse.json({ message: "Invalid credentials" }, { status: 400 })
+      return NextResponse.json(
+        { message: "Invalid credentials" },
+        { status: 400 }
+      )
     }
 
-    return NextResponse.json({ message: "Login successful" })
+    return NextResponse.json(
+      { message: "Login successful" },
+      { status: 200 }
+    )
 
   } catch (error) {
-    return NextResponse.json({ message: "Server error" }, { status: 500 })
+    return NextResponse.json(
+      { message: "Server error" },
+      { status: 500 }
+    )
   }
 }

@@ -7,7 +7,6 @@ export async function GET() {
   try {
     await connectDB()
 
-    // Check if admin already exists
     const existingAdmin = await Admin.findOne({ username: "admin" })
     if (existingAdmin) {
       return NextResponse.json({ message: "Admin already exists" })
@@ -21,7 +20,9 @@ export async function GET() {
     })
 
     return NextResponse.json({ message: "Admin created successfully" })
+
   } catch (error) {
-    return NextResponse.json({ message: "Error creating admin" })
+    console.log("FULL ERROR:", error)   // 👈 ADD THIS
+    return NextResponse.json({ message: error.message })  // 👈 show real error
   }
 }

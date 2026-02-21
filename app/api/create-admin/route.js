@@ -7,7 +7,7 @@ export async function GET() {
   try {
     await connectDB()
 
-    const existingAdmin = await Admin.findOne({ username: "admin" })
+    const existingAdmin = await Admin.findOne({ username: "aditya" })
     if (existingAdmin) {
       return NextResponse.json({ message: "Admin already exists" })
     }
@@ -15,7 +15,7 @@ export async function GET() {
     const hashedPassword = await bcrypt.hash("123456", 10)
 
     await Admin.create({
-      username: "admin",
+      username: "aditya",
       password: hashedPassword
     })
 
